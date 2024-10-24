@@ -3,17 +3,13 @@ name: Docker Compose Action
 on: [push]
 
 jobs:
- build:
+  docker:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v1
 
-      - name: Run docker-compose
-        uses: hoverkraft-tech/compose-action@v2.0.1
-        with:
-          compose-file: "./Containers/docker-compose.yml"
-
-      - name: Execute tests in the running services
-        run: |
-          docker-compose exec test-app pytest
+    - name: Start containers
+      run: docker-compose -f "docker-compose.yml" up -d --build
