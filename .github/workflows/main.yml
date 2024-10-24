@@ -35,6 +35,10 @@ jobs:
     - name: Verify the services are running
       run: docker-compose ps
 
+    - name: List files in build context
+      run: ls -R .
+
+
     # - name: Run tests (if applicable)
     #   run: |
     #     # Add any test commands here, for example:
