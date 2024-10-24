@@ -46,4 +46,5 @@ jobs:
     #     docker-compose exec <service-name> <test-command>
 
     - name: Shut down Docker Compose
+      working-directory: ./Containers
       run: docker-compose down
