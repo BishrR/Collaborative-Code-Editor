@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h2>WebSocket Test</h2>
+
+<textarea id="codeArea" rows="10" cols="50">Write code here...</textarea>
+<br>
+<button onclick="sendCode()">Send Code</button>
+
+<div id="messages"></div>
+
+<script>
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/code', function (codeMessage) {
+                showMessage(JSON.parse(codeMessage.body).codeBody);
+            });
+        });
+    }
+
+    function sendCode() {
+        var code = document.getElementById("codeArea").value;
+        stompClient.send("/app/edit-code", {}, JSON.stringify({'codeBody': code}));
+    }
+
+    function showMessage(message) {
+        var messagesDiv = document.getElementById("messages");
+        var messageElement = document.createElement("p");
+        messageElement.appendChild(document.createTextNode(message));
+        messagesDiv.appendChild(messageElement);
+    }
+
+    // Connect to WebSocket when the page is loaded
+    window.onload = function() {
+        connect();
+    }
+</script>
+</body>
+</html>
