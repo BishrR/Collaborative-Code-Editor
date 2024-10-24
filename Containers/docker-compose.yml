@@ -1,11 +1,11 @@
 services:
-  # code-editor:
-  #   container_name: code-editor
-  #   build: ../CodeEditor/.
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - cluster-network
+  code-editor:
+    container_name: code-editor
+    build: ../CodeEditor/.
+    ports:
+      - "8080:8080"
+    networks:
+      - cluster-network
 
   front-end:
     container_name: front-end
