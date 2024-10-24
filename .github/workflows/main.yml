@@ -33,6 +33,7 @@ jobs:
       run: docker-compose up --build -d
 
     - name: Verify the services are running
+      working-directory: ./Containers
       run: docker-compose ps
 
     - name: List files in build context
