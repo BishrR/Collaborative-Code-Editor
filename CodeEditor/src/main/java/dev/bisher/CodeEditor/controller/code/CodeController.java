@@ -1,13 +1,13 @@
-package dev.bisher.CodeEditor.controller;
+package dev.bisher.CodeEditor.controller.code;
 
-
-import dev.bisher.CodeEditor.model.Code;
-import dev.bisher.CodeEditor.model.CodeMessage;
-import dev.bisher.CodeEditor.model.CodeResponse;
-import dev.bisher.CodeEditor.model.Role;
+import dev.bisher.CodeEditor.model.code.CodeUpdatePayLoad;
+import dev.bisher.CodeEditor.model.code.Code;
+import dev.bisher.CodeEditor.model.code.CodeMessage;
+import dev.bisher.CodeEditor.model.code.CodeResponse;
+import dev.bisher.CodeEditor.model.role.Role;
 import dev.bisher.CodeEditor.model.user.User;
-import dev.bisher.CodeEditor.service.CodeService;
-import dev.bisher.CodeEditor.service.FileSystemService;
+import dev.bisher.CodeEditor.service.code.CodeService;
+import dev.bisher.CodeEditor.service.file.FileSystemService;
 import dev.bisher.CodeEditor.service.user.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class CodeController {
         try {
             return new ResponseEntity<>(new CodeMessage(fileSystemService.getCodeFromFileSystem(id)), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -137,12 +137,12 @@ public class CodeController {
         }
 
         code.ifPresent(c -> {
-            c.setCodeName(codeUpdatePayLoad.codeName);
+            c.setCodeName(codeUpdatePayLoad.getCodeName());
             codeService.updateCode(c);
         });
 
         try {
-            fileSystemService.updateCodeInFileSystem(code.get().getId(), codeUpdatePayLoad.codeName, codeUpdatePayLoad.codeBody);
+            fileSystemService.updateCodeInFileSystem(code.get().getId(), codeUpdatePayLoad.getCodeName(), codeUpdatePayLoad.getCodeBody());
             return new ResponseEntity<>("Code Successfully Updated", HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Error while updating code in file system", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -163,7 +163,7 @@ public class CodeController {
         Code newVersion = codeService.saveNewCodeVersion(baseId, user.getObjectId());
         String codePath = fileSystemServiceDirPath+"/"+newVersion.getId();
         try {
-            fileSystemService.saveCodeToFileSystem(codePath, codeUpdatePayLoad.codeBody);
+            fileSystemService.saveCodeToFileSystem(codePath, codeUpdatePayLoad.getCodeBody());
             return new ResponseEntity<>(newVersion, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -184,7 +184,7 @@ public class CodeController {
         Code newVersion = codeService.saveNewCodeVersion(baseId, user.getObjectId());
         String codePath = fileSystemServiceDirPath+"/"+newVersion.getId();
         try {
-            fileSystemService.saveCodeToFileSystem(codePath, codeUpdatePayLoad.codeBody);
+            fileSystemService.saveCodeToFileSystem(codePath, codeUpdatePayLoad.getCodeBody());
             return new ResponseEntity<>(newVersion, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

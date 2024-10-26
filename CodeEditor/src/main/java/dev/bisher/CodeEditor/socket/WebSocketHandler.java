@@ -12,8 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class WebSocketHandler extends TextWebSocketHandler {
 
     private static Set<WebSocketSession> sessions = new HashSet<>();
-    private int counter = 0;
-    private int sessionCounter = 0;
 
     private final Lock lock = new ReentrantLock();
     @Override
@@ -27,12 +25,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         if (lock.tryLock()){
          try {
              for (WebSocketSession webSocketSession : sessions) {
-//            System.out.println("Session "+sessio+": "+webSocketSession.toString());
-//            sessio++;
                  if (webSocketSession.isOpen()) {
                      try {
-//                    System.out.println("Counter "+counter+": "+message.getPayload());
-//                    counter++;
                          webSocketSession.sendMessage(message);
                      } catch (IOException e) {
                          e.printStackTrace();

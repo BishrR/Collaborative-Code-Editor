@@ -1,4 +1,4 @@
-package dev.bisher.CodeEditor.service;
+package dev.bisher.CodeEditor.service.file;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

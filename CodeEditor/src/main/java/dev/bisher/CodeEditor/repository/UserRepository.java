@@ -1,4 +1,4 @@
-package dev.bisher.CodeEditor.controller.user;
+package dev.bisher.CodeEditor.repository;
 
 import dev.bisher.CodeEditor.model.user.User;
 import org.bson.types.ObjectId;

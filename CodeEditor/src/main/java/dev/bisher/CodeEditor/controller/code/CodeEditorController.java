@@ -1,6 +1,6 @@
-package dev.bisher.CodeEditor.controller;
+package dev.bisher.CodeEditor.controller.code;
 
-import dev.bisher.CodeEditor.model.CodeMessage;
+import dev.bisher.CodeEditor.model.code.CodeMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;

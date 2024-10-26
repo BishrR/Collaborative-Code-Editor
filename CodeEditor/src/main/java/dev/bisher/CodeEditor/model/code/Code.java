@@ -1,5 +1,6 @@
-package dev.bisher.CodeEditor.model;
+package dev.bisher.CodeEditor.model.code;
 
+import dev.bisher.CodeEditor.model.role.Role;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;

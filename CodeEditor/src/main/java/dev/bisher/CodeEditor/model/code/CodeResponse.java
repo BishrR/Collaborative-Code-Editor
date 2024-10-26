@@ -1,4 +1,4 @@
-package dev.bisher.CodeEditor.model;
+package dev.bisher.CodeEditor.model.code;
 
 public class CodeResponse {
 

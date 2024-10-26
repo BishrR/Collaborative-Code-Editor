@@ -1,6 +1,6 @@
-package dev.bisher.CodeEditor.controller;
+package dev.bisher.CodeEditor.repository;
 
-import dev.bisher.CodeEditor.model.Code;
+import dev.bisher.CodeEditor.model.code.Code;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

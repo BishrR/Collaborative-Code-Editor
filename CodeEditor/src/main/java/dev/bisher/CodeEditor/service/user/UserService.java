@@ -1,6 +1,6 @@
 package dev.bisher.CodeEditor.service.user;
 
-import dev.bisher.CodeEditor.controller.user.UserRepository;
+import dev.bisher.CodeEditor.repository.UserRepository;
 import dev.bisher.CodeEditor.model.user.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

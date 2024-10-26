@@ -1,8 +1,8 @@
-package dev.bisher.CodeEditor.service;
+package dev.bisher.CodeEditor.service.code;
 
-import dev.bisher.CodeEditor.controller.CodeRepository;
-import dev.bisher.CodeEditor.model.Code;
-import dev.bisher.CodeEditor.model.Role;
+import dev.bisher.CodeEditor.repository.CodeRepository;
+import dev.bisher.CodeEditor.model.code.Code;
+import dev.bisher.CodeEditor.model.role.Role;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class CodeService {
     }
 
     public Optional<Code> findCodeById(String id) {
-        return codeRepository.findById(id);
+        return Optional.ofNullable(codeRepository.findById(id).orElseThrow(() -> new RuntimeException("Code Not Found")));
     }
 
     public Code createCode(String codeName, ObjectId creatorId) {
