@@ -51,7 +51,7 @@ jobs:
 
 
   EC2-Deploy:
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest
     steps:
       - id: deploy
@@ -62,6 +62,6 @@ jobs:
           aws_default_region: us-east-1
           aws_elb_app_port: 8080 # This should match the docker exposed port. Defaults to 3000.
       
-      - name: destroy
-        stack_destroy: true
-          tf_state_bucket_destroy: true
+      # - name: destroy
+      #   stack_destroy: true
+      #     tf_state_bucket_destroy: true
