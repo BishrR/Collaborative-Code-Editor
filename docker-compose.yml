@@ -1,1 +1,38 @@
+services:
+  code-editor:
+    container_name: code-editor
+    build: CodeEditor/.
+    ports:
+      - "8080:8080"
+    networks:
+      - cluster-network
 
+  front-end:
+    container_name: front-end
+    build: CodeEditorClient/code-editor-client/.
+    ports:
+      - "3000:3000"
+    networks:
+      - cluster-network
+
+  file-service:
+    container_name: file-container
+    build: Containers/File_Container/.
+    ports:
+      - "3003:3003"
+    restart: on-failure
+    networks:
+      - cluster-network
+
+  python-container:
+    container_name: python-container
+    build: Containers/Python_Container/.
+    ports:
+      - "5000:5000"
+    networks:
+      - cluster-network
+
+
+networks:
+  cluster-network:
+    driver: bridge
