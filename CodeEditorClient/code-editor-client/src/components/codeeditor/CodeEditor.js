@@ -75,7 +75,7 @@ const CodeEditor = () => {
         }
     };
 
-    const socket = new WebSocket("ws://localhost:8080/websocket");
+    const socket = new WebSocket("ws://code-editor:8080/websocket");
 
     socket.onopen = function (event) {
         console.log("WebSocket connection established.");
