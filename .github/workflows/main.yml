@@ -148,7 +148,7 @@ jobs:
 
             # Clone the repository and deploy with Docker Compose
             mkdir -p ~/app && cd ~/app
-            git clone https://github.com/BishR/Collaborative-Code-Editor.git .            
+            git clone https://github.com/BishrR/Collaborative-Code-Editor.git .            
             docker-compose down
             docker-compose up -d --build
           EOF
