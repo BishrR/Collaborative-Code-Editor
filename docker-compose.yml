@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   code-editor:
     container_name: code-editor
@@ -6,6 +8,8 @@ services:
       - "8080:8080"
     networks:
       - cluster-network
+    environment:
+      - EC2_PUBLIC_IP=${EC2_PUBLIC_IP}
 
   front-end:
     container_name: front-end
@@ -14,6 +18,8 @@ services:
       - "3000:3000"
     networks:
       - cluster-network
+    environment:
+      - EC2_PUBLIC_IP=${EC2_PUBLIC_IP}
 
   file-service:
     container_name: file-container
@@ -23,6 +29,8 @@ services:
     restart: on-failure
     networks:
       - cluster-network
+    environment:
+      - EC2_PUBLIC_IP=${EC2_PUBLIC_IP}
 
   python-container:
     container_name: python-container
@@ -31,7 +39,8 @@ services:
       - "5000:5000"
     networks:
       - cluster-network
-
+    environment:
+      - EC2_PUBLIC_IP=${EC2_PUBLIC_IP}
 
 networks:
   cluster-network:
