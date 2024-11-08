@@ -135,7 +135,7 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.MyKey }}
+          ssh-private-key: ${{ secrets.MYKEY }}
 
       - name: Deploy Docker Compose to EC2 Instance
         run: |
