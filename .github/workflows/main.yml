@@ -1,83 +1,154 @@
-name: CI/CD Pipeline for Docker Compose
+# name: CI/CD Pipeline for Docker Compose
+
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - master
+
+# jobs:
+#   # build:
+#   #   runs-on: ubuntu-latest
+
+#   #   steps:
+#   #   - name: Checkout repository
+#   #     uses: actions/checkout@v3
+
+#   #   - name: Set up Docker Buildx
+#   #     uses: docker/setup-buildx-action@v2
+
+#   #   - name: Log in to DockerHub
+#   #     uses: docker/login-action@v2
+#   #     with:
+#   #       username: ${{ secrets.DOCKER_USERNAME }}
+#   #       password: ${{ secrets.DOCKER_PASSWORD }}
+
+#   #   - name: Set up Docker Compose
+#   #     run: sudo apt-get update && sudo apt-get install docker-compose -y
+
+#   #   - name: Build and run Docker Compose
+#   #     working-directory: ./Containers  # Change to the path where your docker-compose.yml is located
+#   #     run: docker-compose up --build -d
+
+#   #   - name: Verify the services are running
+#   #     working-directory: ./Containers
+#   #     run: docker-compose ps
+
+#   #   - name: List files in build context
+#   #     run: ls -R .
+
+
+#   #   # - name: Run tests (if applicable)
+#   #   #   run: |
+#   #   #     # Add any test commands here, for example:
+#   #   #     docker-compose exec <service-name> <test-command>
+
+#   #   - name: Shut down Docker Compose
+#   #     working-directory: ./Containers
+#   #     run: docker-compose down
+
+
+#   EC2-Deploy:
+#     # needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - id: deploy
+#         uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.1
+#         with:
+#           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws_default_region: us-east-1
+#           ssh_public_key: ${{ secrets.EC2_SSH_PUBLIC_KEY }}
+#           aws_elb_app_port: 8080 # This should match the docker exposed port. Defaults to 3000.
+      
+#       # - name: destroy
+#       #   stack_destroy: true
+#       #     tf_state_bucket_destroy: true
+
+#   # EC2-Deploy:
+#   #   runs-on: ubuntu-latest
+#   #   environment:
+#   #     name: ${{ github.ref_name }}
+#   #     url: ${{ steps.deploy.outputs.vm_url }}
+#   #   steps:
+#   #     - id: deploy
+#   #       name: Deploy
+#   #       uses: bitovi/github-actions-deploy-docker-to-ec2@v0.5.0
+#   #       with:
+#   #         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+#   #         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+#   #         aws_default_region: us-east-1
+#   #         app_port: 3000
+
+name: EC2 Deployment with Docker Containers
 
 on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v3
-
-  #   - name: Set up Docker Buildx
-  #     uses: docker/setup-buildx-action@v2
-
-  #   - name: Log in to DockerHub
-  #     uses: docker/login-action@v2
-  #     with:
-  #       username: ${{ secrets.DOCKER_USERNAME }}
-  #       password: ${{ secrets.DOCKER_PASSWORD }}
-
-  #   - name: Set up Docker Compose
-  #     run: sudo apt-get update && sudo apt-get install docker-compose -y
-
-  #   - name: Build and run Docker Compose
-  #     working-directory: ./Containers  # Change to the path where your docker-compose.yml is located
-  #     run: docker-compose up --build -d
-
-  #   - name: Verify the services are running
-  #     working-directory: ./Containers
-  #     run: docker-compose ps
-
-  #   - name: List files in build context
-  #     run: ls -R .
-
-
-  #   # - name: Run tests (if applicable)
-  #   #   run: |
-  #   #     # Add any test commands here, for example:
-  #   #     docker-compose exec <service-name> <test-command>
-
-  #   - name: Shut down Docker Compose
-  #     working-directory: ./Containers
-  #     run: docker-compose down
-
-
-  EC2-Deploy:
-    # needs: build
+  DeployToEC2:
     runs-on: ubuntu-latest
-    steps:
-      - id: deploy
-        uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.1
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: us-east-1
-          ssh_public_key: ${{ secrets.EC2_SSH_PUBLIC_KEY }}
-          aws_elb_app_port: 8080 # This should match the docker exposed port. Defaults to 3000.
-      
-      # - name: destroy
-      #   stack_destroy: true
-      #     tf_state_bucket_destroy: true
 
-  # EC2-Deploy:
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: ${{ github.ref_name }}
-  #     url: ${{ steps.deploy.outputs.vm_url }}
-  #   steps:
-  #     - id: deploy
-  #       name: Deploy
-  #       uses: bitovi/github-actions-deploy-docker-to-ec2@v0.5.0
-  #       with:
-  #         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID}}
-  #         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-  #         aws_default_region: us-east-1
-  #         app_port: 3000
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Launch EC2 Instance
+        id: ec2
+        run: |
+          INSTANCE_ID=$(aws ec2 run-instances \
+            --image-id ami-063d43db0594b521b \  # Replace with your AMI ID
+            --instance-type t2.micro \         # Specify instance type
+            --key-name MyKey \
+            --security-group-ids sg-06dc1b71b36c40ef7 \
+            --query 'Instances[0].InstanceId' \
+            --output text)
+
+          echo "Instance ID: $INSTANCE_ID"
+          echo "instance_id=$INSTANCE_ID" >> $GITHUB_ENV
+
+      - name: Wait for EC2 Instance to be Running
+        run: |
+          aws ec2 wait instance-status-ok --instance-ids ${{ env.instance_id }}
+
+      - name: Get EC2 Public IP
+        id: ec2_ip
+        run: |
+          PUBLIC_IP=$(aws ec2 describe-instances \
+            --instance-ids ${{ env.instance_id }} \
+            --query 'Reservations[0].Instances[0].PublicIpAddress' \
+            --output text)
+          echo "Public IP: $PUBLIC_IP"
+          echo "public_ip=$PUBLIC_IP" >> $GITHUB_ENV
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.MyKey }}
+
+      - name: Deploy Docker Compose to EC2 Instance
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ env.public_ip }} << 'EOF'
+            # Install Docker
+            sudo yum update -y
+            sudo amazon-linux-extras install docker -y
+            sudo service docker start
+            sudo usermod -aG docker ec2-user
+
+            # Clone the repository and deploy with Docker Compose
+            mkdir -p ~/app && cd ~/app
+            git clone https://github.com/BishR/Collaborative-Code-Editor.git .
+            docker-compose down
+            docker-compose up -d --build
+          EOF
