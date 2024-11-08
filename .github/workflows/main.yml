@@ -139,7 +139,7 @@ jobs:
 
       - name: Deploy Docker Compose to EC2 Instance
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ env.public_ip }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=20 -o ServerAliveCountMax=15 ec2-user@${{ env.public_ip }} << 'EOF'
             # Install Docker
             sudo yum update -y
             sudo yum install docker git -y            
