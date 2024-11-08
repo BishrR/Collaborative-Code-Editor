@@ -151,4 +151,5 @@ jobs:
             git clone https://github.com/BishR/Collaborative-Code-Editor.git .
             docker-compose down
             docker-compose up -d --build
+            #test
           EOF
