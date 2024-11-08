@@ -142,14 +142,13 @@ jobs:
           ssh -o StrictHostKeyChecking=no ec2-user@${{ env.public_ip }} << 'EOF'
             # Install Docker
             sudo yum update -y
-            sudo yum install docker -y
+            sudo yum install docker git -y            
             sudo service docker start
             sudo usermod -aG docker ec2-user
 
             # Clone the repository and deploy with Docker Compose
             mkdir -p ~/app && cd ~/app
-            git clone https://github.com/BishR/Collaborative-Code-Editor.git .
+            git clone https://github.com/BishR/Collaborative-Code-Editor.git .            
             docker-compose down
             docker-compose up -d --build
-            #test
           EOF
