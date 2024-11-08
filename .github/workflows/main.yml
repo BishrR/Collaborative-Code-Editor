@@ -143,8 +143,8 @@ jobs:
             # Install Docker
             sudo yum update -y
             sudo yum install docker -y
-            #sudo service docker start
-            #sudo usermod -aG docker ec2-user
+            sudo service docker start
+            sudo usermod -aG docker ec2-user
 
             # Clone the repository and deploy with Docker Compose
             #mkdir -p ~/app && cd ~/app
