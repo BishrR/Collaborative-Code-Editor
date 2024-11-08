@@ -75,7 +75,8 @@ const CodeEditor = () => {
         }
     };
 
-    const socket = new WebSocket("ws://code-editor:8080/websocket");
+    const ec2PublicIp = process.env.EC2_PUBLIC_IP;
+    const socket = new WebSocket("ws://" + ec2PublicIp + ":8080/websocket");
 
     socket.onopen = function (event) {
         console.log("WebSocket connection established.");
