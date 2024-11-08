@@ -17,12 +17,15 @@ public class PythonRunnerController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${EC2_PUBLIC_IP}")
+    private String ec2PublicIp;
+
     @PostMapping("/run-python")
     public ResponseEntity<Map<String, String>> runPythonCode(@RequestBody Map<String, String> request){
         String code = request.get("code");
 
 //        String dockerUrl = "http://localhost:5000/run";
-        String dockerUrl = "http://python-container:5000/run";
+        String dockerUrl = "http://" + ec2PublicIp + ":5000/run";
         Map<String, String> pythonRequest = new HashMap<>();
         pythonRequest.put("code", code);
 
