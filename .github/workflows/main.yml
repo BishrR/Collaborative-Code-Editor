@@ -150,12 +150,12 @@ jobs:
             DOCKER_COMPOSE_VERSION=2.0.0
             sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
 
-            # Refresh group membership for Docker access
-            #newgrp docker <<EONG
-            
+            # Export EC2 Public IP to environment variable
+            export EC2_PUBLIC_IP=${{ env.public_ip }}
+
             # Clone the repository and deploy with Docker Compose
             mkdir -p ~/app && cd ~/app
             git clone https://github.com/BishrR/Collaborative-Code-Editor.git .            
             sudo docker-compose down
-            sudo docker-compose up -d --build
+            sudo EC2_PUBLIC_IP=${EC2_PUBLIC_IP} docker-compose up -d --build
           EOF
