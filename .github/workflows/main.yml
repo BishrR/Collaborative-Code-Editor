@@ -108,8 +108,8 @@ jobs:
         id: ec2
         run: |
           INSTANCE_ID=$(aws ec2 run-instances \
-            --image-id ami-063d43db0594b521b \  # Replace with your AMI ID
-            --instance-type t2.micro \         # Specify instance type
+            --image-id ami-063d43db0594b521b \
+            --instance-type t2.micro \
             --key-name MyKey \
             --security-group-ids sg-06dc1b71b36c40ef7 \
             --query 'Instances[0].InstanceId' \
